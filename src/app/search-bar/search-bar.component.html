@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="row">
+        <div class="col-1">
+            <label>Select the field </label>
+        </div>
+        <div class="col-2">
+            <select #selectedColumn>
+                <option selected value="productId">Product Id</option>
+                <option value="productName">Product Name</option>
+                <option value="price">Price</option>
+                <option value="description">Description</option>
+                <option value="quantity">Quantity</option>
+            </select>
+
+        </div>
+        <div class="col-1">
+            <label>Select the order </label>
+        </div>
+        <div class="col-2">
+            <select #selectedOrder>
+                <option selected value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+        </div>
+        <div class="col-1">
+            <input type="button" value="Sort" class="btn btn-primary" (click)="sortEventHandler(selectedColumn,selectedOrder)" />
+        </div>
+    </div>
+</div>
+<!-- 
+    Requirement:
+    1. Reusability in different components
+    2. Sort the data in the table based on field and order
+    Solution :
+    1. Write the sort code in the sort button event handler
+    2. Create a custom pipe which will sort the data
+    3. 
+ -->

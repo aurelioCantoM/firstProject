@@ -1,0 +1,18 @@
+.btn {
+    border: 0;
+    border-radius: 20px;
+    padding: 0.75em 2.25em;
+    font-family: inherit;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn--primary {
+    background-color: #4288AA;
+    color: hsla(0, 100%, 100%, 0.8);
+  }
+  .btn--primary:hover {
+    border-radius: 15px;
+    background-color: rgba(66,136,170, 0.9);
+  }

@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-3" *ngFor="let product of products">
+      <div class="card">
+        <img [src]="product.imgUrl" class="card-img-top m-auto"  class="" alt={{product.productName}} />
+          <div class="card-body">
+            <h2 class="card-title">{{product.productName}}</h2>
+            <p class="card-text">{{product.description}}</p>
+            <p class="card-text">{{product.price | currency: 'MXN'}}</p>
+            <p class="card-text">{{product.quantityInStock}} Available!</p>
+          </div>
+          <input type="text" value="View Product" class="btn btn-primary" (click)="addToCart(product)">
+      </div>
+    </div>
+  </div>
+  <app-add-to-cart></app-add-to-cart>
+</div>

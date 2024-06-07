@@ -1,0 +1,8 @@
+
+<input type="button" [value]="buttonText" class="btn btn-primary" (click)="toggleDisplay()" />
+<div *ngIf="showCart">
+    <app-cart></app-cart>
+</div>
+<div *ngIf="!showCart">
+    <app-products-list></app-products-list>
+</div>

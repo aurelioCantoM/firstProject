@@ -1,0 +1,29 @@
+<ng-container *ngIf="!isCartEmpty; then cartTable; else cartIsEmpty"></ng-container>
+<ng-template #cartTable>
+    <app-search-bar></app-search-bar>
+    <div class="col">
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th>ProductId</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let product of cart.selectedProducts|displayArray:sortField:sortOrder">
+                    <td>{{product.productId}}</td>
+                    <td>{{product.productName}}</td>
+                    <td>{{product.price}}</td>
+                    <td>{{product.description}}</td>
+                    <td>{{product.selectedQuantity}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-template>
+<ng-template #cartIsEmpty>
+  <p>Your cart is Empty!!</p>
+</ng-template>
