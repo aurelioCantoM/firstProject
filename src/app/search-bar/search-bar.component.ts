@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input, InputSignal, OnInit } from '@angular/core';
 import { CartManagerService } from '../cart/manager-service/cart-manager.service';
 import { Cart, Product } from '../type-definitions/product-definitions';
 
@@ -8,11 +8,13 @@ import { Cart, Product } from '../type-definitions/product-definitions';
   styleUrls: ['./search-bar.component.css']
 })
 export class SearchBarComponent implements OnInit {
-  @Input() cart: Cart;
+  cart: InputSignal<Cart>;
   searchTerm:string;
   sortField: string;
   sortOrder: string;
-  constructor(private cartManager: CartManagerService){}
+  constructor(private cartManager: CartManagerService){
+    
+  }
 
   ngOnInit() {
   }

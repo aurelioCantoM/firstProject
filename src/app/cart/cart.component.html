@@ -13,7 +13,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let product of cart.selectedProducts|displayArray:sortField:sortOrder">
+                <tr *ngFor="let product of cart.selectedProducts">
                     <td>{{product.productId}}</td>
                     <td>{{product.productName}}</td>
                     <td>{{product.price}}</td>

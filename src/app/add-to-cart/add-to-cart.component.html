@@ -1,23 +1,18 @@
-<div *ngIf="isProductSelected">
-  <div class="container-fluid">
-    <div class="card">
-      <img src={{selProd.imgUrl}} class="card-img-top m-auto"  alt={{selProd.productName}} />
-        <div class="card-body">
-          <h2 class="card-title">{{selProd.productName}}</h2>
-          <p class="card-text">{{selProd.description}}</p>
-          <p class="card-text">{{selProd.price | currency: 'MXN'}}</p>
-          <p class="card-text">{{selProd.quantityInStock}} Available!</p>
-        </div>
-        <div class="container-fluid">
-          <input type="button" value="Remove Item" (click)="removeItem()" [disabled]="removeBtnDisabled"/>
-          <p>{{cartQuantity}}</p>
-          <input type="button" value="Add Item" (click)="addItem()" [disabled]="addBtnDisabled"/>
-        </div>
-        <div class="">
-          <button type="button" (click)="cancelSelection()" [disabled]="cancelBtnDisabled">Cancel</button>
-          <button type="button" (click)="confirmSelection()" [disabled]="confirmBtnDisabled">Add to Cart</button>
-        </div>
-        <div></div>
-    </div>
+
+<mat-dialog-content>
+  <img src={{selProd.imgUrl}} class="card-img-top m-auto"  alt={{selProd.productName}} />
+  <div class="card-body">
+    <h2 class="card-title">{{selProd.productName}}</h2>
+    <p class="card-text">{{selProd.description}}</p>
+    <p class="card-text">{{selProd.price | currency: 'MXN'}}</p>
+    <p class="card-text">{{selProd.quantityInStock}} Available!</p>
   </div>
-</div>
+  <div class="container-fluid">
+    <button type="button" mat-raised-button (click)="removeItem()" [disabled]="removeBtnDisabled">-</button>
+    <p>{{cartQuantity}}</p>
+    <button type="button" mat-raised-button (click)="addItem()" [disabled]="addBtnDisabled">+</button>
+  </div>
+  <div class="">
+    <button type="button" mat-raised-button (click)="confirmSelection()" [disabled]="confirmBtnDisabled">Add to Cart</button>
+  </div>
+</mat-dialog-content>

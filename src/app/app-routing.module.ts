@@ -11,22 +11,8 @@ import { checkPaymentsGuard } from './guards/check-payments.guard';
 import { registerGuard } from './register.guard';
 
 const routes: Routes = [
-  {
-    path:"identity",
-    component:IdentityComponent, 
-    children: [{
-      path: 'register',
-      component: RegisterComponent,
-      canDeactivate: [registerGuard]
-    },
-    {
-      path: 'login',
-      component: LoginComponent,
-      canDeactivate: [registerGuard]
-    }]
-  },
-  {path:"login",component:LoginComponent},
-  {path:"register",component:RegisterComponent},
+  {path:"login",component:LoginComponent, canActivate: [registerGuard]},
+  {path:"register",component:RegisterComponent, canActivate: [registerGuard]},
   {path:"search",component:SearchAdapterComponent},
   {path:"product-manager",component:ProductManagerComponent},
   {path:"home",component:HomeComponent},

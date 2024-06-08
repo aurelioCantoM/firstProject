@@ -1,27 +1,30 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Injectable, WritableSignal, signal } from '@angular/core';
 import { usersData } from 'src/app/model/products-list.model';
-import { User } from 'src/app/type-definitions/product-definitions';
+import { EMPTY_USER, User } from 'src/app/type-definitions/product-definitions';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegisterManagerService {
-  isUserRegistered: BehaviorSubject<boolean>;
-  protected readonly userList: BehaviorSubject<Array<User>>;
-  loggedUser: Subject<User> = new Subject<User>();
+  isUserRegistered:WritableSignal<boolean>;
+  protected readonly userList: WritableSignal<Array<User>>;
+  loggedUser: WritableSignal<User>;
 
-  constructor() { 
-    this.userList = new BehaviorSubject(usersData);
-    this.isUserRegistered = new BehaviorSubject(false);
+
+  constructor(){
+    this.isUserRegistered = signal(false);
+    this.loggedUser = signal(EMPTY_USER);
+    this.userList = signal(usersData);
   }
-
   private setUserLoggedIn(){
-    this.isUserRegistered.next(true);
+    this.isUserRegistered.update(() => true);
+    console.log('private: user is now registered!');
   }
 
   setUserLoggedOut() {
-    this.isUserRegistered.next(false);
+    console.log('public: user is now unregistered!');
+    this.isUserRegistered.update(() => false);
+
   }
 
   validateUser(mail: string | null, password: string | null): Record<string, any> {
@@ -30,12 +33,12 @@ export class RegisterManagerService {
     if(mail === null || password === null) {
       return {userExists, passwordMatch};
     }
-    const userNdx = this.userList.value.findIndex(user => user.email === mail);
+    const userNdx = this.userList().findIndex(user => user.email === mail);
     if (userNdx !== -1) {
       userExists = true;
-      if (this.userList.value[userNdx].password === password) {
+      if (this.userList()[userNdx].password === password) {
         passwordMatch = true;
-        this.loggedUser.next(this.userList.value[userNdx]);
+        this.loggedUser.update(() => this.userList()[userNdx]);
         this.setUserLoggedIn();
       }
     }

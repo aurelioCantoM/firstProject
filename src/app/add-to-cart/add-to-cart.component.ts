@@ -1,7 +1,8 @@
-import { Component, OnInit, DestroyRef, inject } from '@angular/core';
+import { Component, OnInit, DestroyRef, inject, Inject } from '@angular/core';
 import { Product } from '../type-definitions/product-definitions';
 import { CartManagerService } from '../cart/manager-service/cart-manager.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-to-cart',
@@ -17,14 +18,20 @@ export class AddToCartComponent implements OnInit {
   maximumItemsAvailable: number;
   cancelBtnDisabled: boolean;
   confirmBtnDisabled: boolean;
-  isProductSelected = false;
   
-  constructor(private cartManager: CartManagerService){
+  constructor(
+    private cartManager: CartManagerService, 
+    public dialogRef: MatDialogRef<AddToCartComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: Product
+  )
+  {
+    debugger;
+    const {imgUrl, productId, productName, quantityInStock, price, description} = data;
+    this.selProd = data;
     this.validateQuantities();
     this.cartManager.selectedProduct.pipe(
       takeUntilDestroyed(this.destroyRef),
     ).subscribe((product: Product) => {
-      this.isProductSelected = true;
       this.selProd = product;
       console.log('product on add to cart component');
       this.maximumItemsAvailable = product.quantityInStock;

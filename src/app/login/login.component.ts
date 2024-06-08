@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RegisterManagerService } from '../register/services/register-manager.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,13 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
 
-  constructor(private registerManager: RegisterManagerService) { }
+  constructor(private registerManager: RegisterManagerService, private router: Router) { 
+    effect(() => {
+      if(this.registerManager.isUserRegistered()) {
+        this.router.navigate(['home']);
+      }
+    });
+  }
 
   onSubmit() {
     debugger;
@@ -26,5 +33,4 @@ export class LoginComponent {
     const password = this.fc.password.value;
     this.registerManager.validateUser(emailId, password);
   }
-    
 }

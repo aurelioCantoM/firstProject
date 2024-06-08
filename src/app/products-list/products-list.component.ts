@@ -2,6 +2,8 @@ import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { Product, ProductToCart, ProductsList } from '../type-definitions/product-definitions';
 import { CartManagerService } from '../cart/manager-service/cart-manager.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatDialog } from '@angular/material/dialog';
+import { AddToCartComponent } from '../add-to-cart/add-to-cart.component';
 
 @Component({
   selector: 'app-products-list',
@@ -14,7 +16,7 @@ export class ProductsListComponent implements OnInit {
   isProductSelected: boolean;
 
 
-  constructor(private cartManager: CartManagerService){
+  constructor(private cartManager: CartManagerService, public dialog: MatDialog){
     this.isProductSelected = false;
   }
   ngOnInit(): void {
@@ -31,13 +33,20 @@ export class ProductsListComponent implements OnInit {
   handleSelectedEvent(event: ProductToCart) {
     const productIndex = this.products.findIndex((product) => product.productId === event.productId);
     this.products[productIndex].quantityInStock = event.quantityInStock - event.selectedQuantity;
-    alert(event);
     this.isProductSelected = false;
   }
 
   handleCancelledSelection(event: string) {
-    alert(event);
     this.isProductSelected = false;
+  }
+
+  toggleAddToCart(productToAdd: Product) {
+    //TODO [AC]; toggle a new dialog with the information to add to cart. maybe add to cart component should be refactored so that it can be used as a pop up dialog
+    const dialogRef  = this.dialog.open(AddToCartComponent, {data: productToAdd});
+    dialogRef.afterClosed().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    )
+    debugger;
   }
   
 }

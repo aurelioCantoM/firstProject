@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, effect, inject } from '@angular/core';
 import { RegisterManagerService } from '../register/services/register-manager.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
@@ -6,8 +6,7 @@ import { EMPTY_USER, User } from '../type-definitions/product-definitions';
 
 enum BtnMsg {
   LOGIN = 'Login',
-  REGISTER = 'Register',
-  WELCOME = `Welcome`,
+  REGISTER = 'Register'
 }
 
 enum ActionableRegistrtaion {
@@ -22,29 +21,26 @@ enum ActionableRegistrtaion {
 })
 export class IdentityComponent {
 
-  private readonly destroyRef = inject(DestroyRef);
   isUserloggedIn = false;
   btnMsg: string;
   registrationMethod: ActionableRegistrtaion;
   registeredUser: User = EMPTY_USER;
   
-
   constructor(private authService: RegisterManagerService, private router: Router) {
-    this.authService.isUserRegistered.pipe(
-        takeUntilDestroyed(this.destroyRef),
-      ).subscribe(isUserRegistered => {
-      this.isUserloggedIn = isUserRegistered;
+    const userRegisteredEffect = effect(() => {
+      this.isUserloggedIn = this.authService.isUserRegistered();
       this.toggleBtnMsg();
-      } 
-    );
-
-    this.authService.loggedUser.pipe(
-      takeUntilDestroyed(this.destroyRef),
-    ).subscribe(user => {
-      this.registeredUser = user;
-      this.btnMsg = `Welcome ${user.firstName}!`
+      console.log('is used logged in? ', this.isUserloggedIn);
     });
-    this.registrationMethod = ActionableRegistrtaion.LOGIN;
+    const loggedUserData = effect(() => {
+      this.registeredUser = this.authService.loggedUser();
+      if(this.registeredUser !== EMPTY_USER) {
+        this.btnMsg = `Welcome ${this.registeredUser.firstName}!`
+      }
+      console.log(this.registeredUser);
+    });
+    //this.registrationMethod = ActionableRegistrtaion.LOGIN;
+    this.toggleBtnMsg();
    }
 
   //use auth service to know whether to display the login/register button or the identity of the user.
