@@ -22,11 +22,9 @@ export type Cart = {
 
 export type User = {
   email: string,
-  password: string, 
-  cart?: Cart,
+  password: string,
   firstName: string,
   lastName: string,
-  date?: any,
   mobile: number,
 }
 
@@ -39,9 +37,7 @@ export const EMPTY_CART: Cart = {
 export const EMPTY_USER: User = {
   email: '',
   password: '',
-  cart: EMPTY_CART,
   firstName: '',
   lastName: '',
-  date: new Date(),
   mobile: 0,
 }

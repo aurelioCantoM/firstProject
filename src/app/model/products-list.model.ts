@@ -54,6 +54,6 @@ export let productListData =  [
 
 
 export let usersData: Array<User> = [
-  {email: 'aurelio.cantoms@intelliswift.com', password: 'u_pick_it', cart: {} as Cart, firstName: 'Aurelio', lastName: 'Canto', date: new Date(), mobile: 1234567890},
-  {email: 'some.example@intelliswift.com', password: 'u_pick_it2', cart: {} as Cart, firstName: 'Some', lastName: 'Example', date: new Date(), mobile: 1234567890},
+  {email: 'aurelio.cantoms@intelliswift.com', password: 'u_pick_it', firstName: 'Aurelio', lastName: 'Canto', mobile: 1234567890},
+  {email: 'some.example@intelliswift.com', password: 'u_pick_it2', firstName: 'Some', lastName: 'Example', mobile: 1234567890},
 ]
