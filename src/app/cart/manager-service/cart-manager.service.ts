@@ -37,25 +37,17 @@ export class CartManagerService {
       productId: 0,
       productName: '',
       price: 0,
-      quantityInStock: 0,
       imgUrl: '',
       description: '',
     } as Product);
   }
   
   private pushToCart(productToAdd: ProductToCart) {
-    const { productId, price, selectedQuantity, quantityInStock } = productToAdd;
+    const { productId, price, selectedQuantity } = productToAdd;
     const selectionPrice = price * selectedQuantity;
-    const remainingItemsInStock = quantityInStock - selectedQuantity;
     const productNdx = productListData.findIndex((product: Product) => product.productId === productId); // Index from products from source
-    const productArrNdx = this.selectedProductArray.findIndex((product: Product) => product.productId === productId); // Index from the selected product array
-    if (productArrNdx >= 0) {
-      this.selectedProductArray[productArrNdx].quantityInStock = remainingItemsInStock;
-    } else {
-      this.selectedProductArray.push({...productToAdd, quantityInStock: remainingItemsInStock});
-    }
+    //const productArrNdx = this.selectedProductArray.findIndex((product: Product) => product.productId === productId); // Index from the selected product array
     this.cartCost = this.cartCost + selectionPrice;
-    productListData[productNdx].quantityInStock = remainingItemsInStock;
     this.cart.next({
       selectedProducts: this.selectedProductArray,
       numberOfItems: this.selectedProductArray.length,

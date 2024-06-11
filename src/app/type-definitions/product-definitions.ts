@@ -9,8 +9,13 @@ export type Product = {
   description: string;
 }
 
-export interface ProductToCart extends Product {
-  selectedQuantity: number,
+export type ProductToCart = {
+  selectedQuantity: number;
+  productId: number;
+  productName: string;
+  price: number;
+  imgUrl: string;
+  description: string;
 }
 
 export type Cart = {

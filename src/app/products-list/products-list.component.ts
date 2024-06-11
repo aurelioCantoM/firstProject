@@ -32,7 +32,6 @@ export class ProductsListComponent implements OnInit {
 
   handleSelectedEvent(event: ProductToCart) {
     const productIndex = this.products.findIndex((product) => product.productId === event.productId);
-    this.products[productIndex].quantityInStock = event.quantityInStock - event.selectedQuantity;
     this.isProductSelected = false;
   }
 
