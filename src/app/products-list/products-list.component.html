@@ -1,19 +1,21 @@
 <div class="cont-fluid">
   <div class="row-1">
-    <div class="colu-3" *ngFor="let product of products">
-      <div class="property-card">
-        <a (click)="toggleAddToCart(product)">
-          <div class="property-image" style="background-image: url({{product.imgUrl}})">
-            <div class="property-image-title">
-              <!-- Optional <h5>Card Title</h5> If you want it, turn on the CSS also. -->
+    @for (product of cartStore.retailState.availableProducts(); track $index) {
+      <div class="colu-3">
+        <div class="property-card">
+          <a (click)="toggleAddToCart(product)">
+            <div class="property-image" style="background-image: url({{product.imgUrl}})">
+              <div class="property-image-title">
+                <!-- Optional <h5>Card Title</h5> If you want it, turn on the CSS also. -->
+              </div>
             </div>
+          </a>
+          <div class="property-description">
+            <h5>{{product.productName}}</h5>
+            <p>{{product.description}}.</p>
           </div>
-        </a>
-        <div class="property-description">
-          <h5>{{product.productName}}</h5>
-          <p>{{product.description}}.</p>
         </div>
       </div>
-    </div>
+    }
   </div>
 </div>

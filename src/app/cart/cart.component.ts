@@ -1,7 +1,7 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CartManagerService } from './manager-service/cart-manager.service';
 import { Cart } from '../type-definitions/product-definitions';
+import { RetailSessionStore } from '../retail-session-store/retail-session.store';
 
 @Component({
   selector: 'app-cart',
@@ -10,17 +10,19 @@ import { Cart } from '../type-definitions/product-definitions';
 })
 export class CartComponent {
   private readonly destroyRef = inject(DestroyRef);
+  readonly cartStore = inject(RetailSessionStore);
   cart: Cart;
   isCartEmpty: boolean;
   sortField: string;
   sortOrder: string;
 
-  constructor(private cartManager: CartManagerService){
-    this.cartManager.cart.pipe(
-      takeUntilDestroyed(this.destroyRef),
-    ).subscribe((latestCart: Cart) => {
-      this.cart = latestCart;
-      this.isCartEmpty = this.cart.numberOfItems <= 0;
+  constructor(){
+    effect(() => {
+      debugger;
+      if(this.cartStore.retailState.isUserLoggedIn()){
+        this.cart = this.cartStore.retailState.userCart();
+        this.isCartEmpty = this.cart.selectedProducts.length === 0;
+      }
     });
   }
 }

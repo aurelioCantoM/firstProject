@@ -1,5 +1,4 @@
 import { Component, input, InputSignal, OnInit } from '@angular/core';
-import { CartManagerService } from '../cart/manager-service/cart-manager.service';
 import { Cart, Product } from '../type-definitions/product-definitions';
 
 @Component({
@@ -12,7 +11,7 @@ export class SearchBarComponent implements OnInit {
   searchTerm:string;
   sortField: string;
   sortOrder: string;
-  constructor(private cartManager: CartManagerService){
+  constructor(){
     
   }
 

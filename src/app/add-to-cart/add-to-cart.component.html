@@ -12,7 +12,5 @@
     <p>{{cartQuantity}}</p>
     <button type="button" mat-raised-button (click)="addItem()" [disabled]="addBtnDisabled">+</button>
   </div>
-  <div class="">
-    <button type="button" mat-raised-button (click)="confirmSelection()" [disabled]="confirmBtnDisabled">Add to Cart</button>
-  </div>
+  <button mat-button [disabled]="!addCartBtnDisabled" (click)="confirmSelection()" cdkFocusInitial>Add to Cart!</button>
 </mat-dialog-content>

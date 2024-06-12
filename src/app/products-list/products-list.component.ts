@@ -1,42 +1,24 @@
-import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, effect, inject } from '@angular/core';
 import { Product, ProductToCart, ProductsList } from '../type-definitions/product-definitions';
-import { CartManagerService } from '../cart/manager-service/cart-manager.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { AddToCartComponent } from '../add-to-cart/add-to-cart.component';
+import { RetailSessionStore } from '../retail-session-store/retail-session.store';
+import { patchState } from '@ngrx/signals';
 
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.css']
 })
-export class ProductsListComponent implements OnInit {
-  private readonly destroyRef = inject(DestroyRef)
-  products: ProductsList;
-  isProductSelected: boolean;
+export class ProductsListComponent {
+  private readonly destroyRef = inject(DestroyRef);
+  readonly cartStore = inject(RetailSessionStore);
+  enableView: boolean;
 
 
-  constructor(private cartManager: CartManagerService, public dialog: MatDialog){
-    this.isProductSelected = false;
-  }
-  ngOnInit(): void {
-    this.cartManager.products.pipe(
-      takeUntilDestroyed(this.destroyRef),
-    ).subscribe(products => this.products = products);
-  }
-
-  addToCart(selectedProduct: Product){
-    this.cartManager.setSelectedProduct(selectedProduct);
-    this.isProductSelected = true;
-  }
-
-  handleSelectedEvent(event: ProductToCart) {
-    const productIndex = this.products.findIndex((product) => product.productId === event.productId);
-    this.isProductSelected = false;
-  }
-
-  handleCancelledSelection(event: string) {
-    this.isProductSelected = false;
+  constructor(public dialog: MatDialog){
+    effect(() => this.enableView = this.cartStore.retailState.isUserLoggedIn());
   }
 
   toggleAddToCart(productToAdd: Product) {
@@ -44,8 +26,12 @@ export class ProductsListComponent implements OnInit {
     const dialogRef  = this.dialog.open(AddToCartComponent, {data: productToAdd});
     dialogRef.afterClosed().pipe(
       takeUntilDestroyed(this.destroyRef)
-    )
-    debugger;
+    ).subscribe((result: ProductToCart) => {
+      debugger;
+      if(!!result){
+        patchState(this.cartStore.retailState, this.cartStore.addToCart(result));
+      }
+    });
   }
   
 }

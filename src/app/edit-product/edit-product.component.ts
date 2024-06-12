@@ -1,6 +1,5 @@
 import { Component, DestroyRef, inject } from '@angular/core';
 import { Product } from '../type-definitions/product-definitions';
-import { CartManagerService } from '../cart/manager-service/cart-manager.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -12,11 +11,9 @@ export class EditProductComponent {
   private readonly destroyRef = inject(DestroyRef);
   productsArr: Array<Product>
   editModeOn: boolean;
-  constructor(private cartManager: CartManagerService) {
+  constructor() {
     this.editModeOn = false;
-    this.cartManager.products.pipe(
-      takeUntilDestroyed(this.destroyRef),
-    ).subscribe((products: Array<Product> ) => this.productsArr = products);
+    
   }
 
   toggleEdit() {

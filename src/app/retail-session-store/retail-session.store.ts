@@ -12,7 +12,9 @@ export interface RetailSession {
   availableProducts: ProductsList,
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class RetailSessionStore {
   readonly #registerManagerService = inject(RegisterManagerService);
   
@@ -34,6 +36,7 @@ export class RetailSessionStore {
 
   addToCart(addedProduct: ProductToCart): PartialStateUpdater<{userCart: Cart}>  {
     return (state) => {
+      debugger;
       if(state.userCart.selectedProducts.length === 0) {
         return ({ userCart: {
             selectedProducts: [addedProduct],

@@ -1,6 +1,5 @@
-import { Component, OnInit, DestroyRef, inject, Inject } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Product } from '../type-definitions/product-definitions';
-import { CartManagerService } from '../cart/manager-service/cart-manager.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -10,34 +9,25 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./add-to-cart.component.css']
 })
 export class AddToCartComponent implements OnInit {
-  private readonly destroyRef = inject(DestroyRef);
+
   selProd: Product;
   cartQuantity = 0;
   addBtnDisabled: boolean;
+  addCartBtnDisabled: boolean;
   removeBtnDisabled: boolean;
   maximumItemsAvailable: number;
   cancelBtnDisabled: boolean;
   confirmBtnDisabled: boolean;
   
   constructor(
-    private cartManager: CartManagerService, 
     public dialogRef: MatDialogRef<AddToCartComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Product
   )
   {
-    debugger;
-    const {imgUrl, productId, productName, quantityInStock, price, description} = data;
+    const { quantityInStock } = data;
+    this.maximumItemsAvailable = quantityInStock;
     this.selProd = data;
     this.validateQuantities();
-    this.cartManager.selectedProduct.pipe(
-      takeUntilDestroyed(this.destroyRef),
-    ).subscribe((product: Product) => {
-      this.selProd = product;
-      console.log('product on add to cart component');
-      this.maximumItemsAvailable = product.quantityInStock;
-      this.cartQuantity = 1;
-      this.validateQuantities();
-    });
   }
 
   ngOnInit() {
@@ -55,15 +45,21 @@ export class AddToCartComponent implements OnInit {
   }
 
   validateQuantities() {
+    debugger;
     this.addBtnDisabled = this.cartQuantity >= this.maximumItemsAvailable;
     this.removeBtnDisabled = this.cartQuantity <= 1;
+    this.addCartBtnDisabled = this.cartQuantity > 0;
   }
 
-  confirmSelection(){
-    this.cartManager.addToCart({...this.selProd, selectedQuantity: this.cartQuantity})
-  }
-
-  cancelSelection(){
-    this.cartManager.cancelSelection();
+  confirmSelection() {
+    const { productId, productName, price, imgUrl, description } = this.data;
+    this.dialogRef.close({
+      productId,
+      productName,
+      price,
+      imgUrl,
+      description,
+      quantity: this.cartQuantity
+    });
   }
 }
