@@ -17,10 +17,6 @@ interface SearchInterface {
   styleUrls: ['./search-bar.component.css']
 })
 export class SearchBarComponent implements OnInit {
-  cart: InputSignal<Cart>;
-  searchTerm:string;
-  sortField: string;
-  sortOrder: string;
   searchOpts: Signal<Array<{label: string, value: {arr: Array<Record<string, any>>, header: string, enabled: boolean}, enabled: boolean}>>;
   tableHeader: Array<string>;
   selectedSearchOpt: {arr: Array<Record<string, any>>, header: string, enabled: boolean};
@@ -70,22 +66,6 @@ export class SearchBarComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  searchEventHandler(selectedColumn: HTMLSelectElement, selectedOrder: HTMLSelectElement) {
-    
-  }
-  searchTermEventHandler(searchTextBox:any)
-  {
-    console.log("Key pressed",searchTextBox.value);
-    this.searchTerm=searchTextBox.value;
-
-  }
-
-  sortEventHandler(selectedColumn: any, selectedOrder: any) {
-    this.sortField = selectedColumn.value;
-    this.sortOrder = selectedOrder.value;
-    console.log();
   }
 
 }
