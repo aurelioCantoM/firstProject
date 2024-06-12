@@ -8,11 +8,12 @@ import { PaymentManagerComponent } from './payment-manager/payment-manager.compo
 import { SearchAdapterComponent } from './search-adapter/search-adapter.component';
 import { checkPaymentsGuard } from './guards/check-payments.guard';
 import { registerGuard } from './register.guard';
+import { SearchBarComponent } from './search-bar/search-bar.component';
 
 const routes: Routes = [
   {path:"login",component:LoginComponent, canActivate: [registerGuard]},
   {path:"register",component:RegisterComponent, canActivate: [registerGuard]},
-  {path:"search",component:SearchAdapterComponent},
+  {path:"search",component:SearchBarComponent},
   {path:"product-manager",component:ProductManagerComponent},
   {path:"home",component:HomeComponent},
   {path:"payments", component:PaymentManagerComponent, canActivate: [checkPaymentsGuard]},

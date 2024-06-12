@@ -1,7 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, inject } from '@angular/core';
 import { Product } from '../type-definitions/product-definitions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ActionableRegistrtaion, RegisterManagerService } from '../register/services/register-manager.service';
 
 @Component({
   selector: 'app-add-to-cart',
@@ -9,7 +10,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./add-to-cart.component.css']
 })
 export class AddToCartComponent implements OnInit {
-
   selProd: Product;
   cartQuantity = 0;
   addBtnDisabled: boolean;
@@ -21,9 +21,9 @@ export class AddToCartComponent implements OnInit {
   
   constructor(
     public dialogRef: MatDialogRef<AddToCartComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Product
-  )
-  {
+    @Inject(MAT_DIALOG_DATA) public data: Product,
+    private readonly identityStore: RegisterManagerService
+  ) {
     const { quantityInStock } = data;
     this.maximumItemsAvailable = quantityInStock;
     this.selProd = data;
@@ -48,7 +48,7 @@ export class AddToCartComponent implements OnInit {
     debugger;
     this.addBtnDisabled = this.cartQuantity >= this.maximumItemsAvailable;
     this.removeBtnDisabled = this.cartQuantity <= 1;
-    this.addCartBtnDisabled = this.cartQuantity > 0;
+    this.addCartBtnDisabled = (this.cartQuantity > 0 && this.identityStore.identityState.registrationMethod() === ActionableRegistrtaion.LOGGEDIN);
   }
 
   confirmSelection() {

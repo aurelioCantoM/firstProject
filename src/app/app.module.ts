@@ -30,6 +30,7 @@ import { TableModule } from 'primeng/table';
 import { SearchAdapterComponent } from './search-adapter/search-adapter.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { MatButtonModule } from '@angular/material/button';
     TableModule,
     MatDialogModule,
     MatButtonModule,
+    SelectButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

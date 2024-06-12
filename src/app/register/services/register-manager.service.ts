@@ -21,12 +21,14 @@ export enum ActionableRegistrtaion {
   providedIn: 'root'
 })
 export class RegisterManagerService {
-  readonly retailStore = inject(RetailSessionStore);
+  
   readonly identityState = signalState<IdentityState>({
     registrationMethod: ActionableRegistrtaion.LOGIN,
     registeredUser: EMPTY_USER,
     userList: usersData,
   });
+  
+  constructor(private readonly retailStore: RetailSessionStore) {}
   
   validateUser(mail: string, password: string) {
     const usersList = this.identityState.userList();
