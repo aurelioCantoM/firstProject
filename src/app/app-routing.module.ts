@@ -5,7 +5,6 @@ import { RegisterComponent } from './register/register.component';
 import { ProductManagerComponent } from './product-manager/product-manager.component';
 import { HomeComponent } from './home/home.component';
 import { PaymentManagerComponent } from './payment-manager/payment-manager.component';
-import { IdentityComponent } from './identity/identity.component';
 import { SearchAdapterComponent } from './search-adapter/search-adapter.component';
 import { checkPaymentsGuard } from './guards/check-payments.guard';
 import { registerGuard } from './register.guard';

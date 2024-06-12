@@ -1,12 +1,14 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { RegisterManagerService } from './register/services/register-manager.service';
+import { ActionableRegistrtaion, RegisterManagerService } from './register/services/register-manager.service';
+import { of } from 'rxjs';
 
 export const registerGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-    const managerService = inject(RegisterManagerService);
-    if (managerService.isUserRegistered()) {
-        return router.navigate(['home']);
-    }
+  const registerManager = inject(RegisterManagerService);
+  if(registerManager.identityState.registrationMethod() === ActionableRegistrtaion.LOGGEDIN) {
+    router.navigate(['home']);
+    return false;
+  }
     return true;
-};
+}

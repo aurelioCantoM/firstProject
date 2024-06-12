@@ -1,6 +1,6 @@
 import { Component, effect } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { RegisterManagerService } from '../register/services/register-manager.service';
+import { ActionableRegistrtaion, RegisterManagerService } from '../register/services/register-manager.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,7 +18,7 @@ export class LoginComponent {
 
   constructor(private registerManager: RegisterManagerService, private router: Router) { 
     effect(() => {
-      if(this.registerManager.isUserRegistered()) {
+      if(this.registerManager.identityState.registrationMethod() === ActionableRegistrtaion.LOGGEDIN) {
         this.router.navigate(['home']);
       }
     });
@@ -29,8 +29,8 @@ export class LoginComponent {
     if (this.loginForm.invalid) {
       return;
     }
-    const emailId = this.fc.emailId.value;
-    const password = this.fc.password.value;
+    const emailId = (this.fc.emailId.value)!;
+    const password = (this.fc.password.value)!;
     this.registerManager.validateUser(emailId, password);
   }
 }

@@ -1,7 +1,6 @@
-import { PartialStateUpdater, signalState, withState } from '@ngrx/signals'
-import { Cart, EMPTY_CART, EMPTY_USER, Product, ProductToCart, ProductsList, User } from '../type-definitions/product-definitions'
-import { Injectable, inject } from '@angular/core';
-import { RegisterManagerService } from '../register/services/register-manager.service';
+import { PartialStateUpdater, signalState } from '@ngrx/signals'
+import { Cart, EMPTY_CART, EMPTY_USER, ProductToCart, ProductsList, User } from '../type-definitions/product-definitions'
+import { Injectable } from '@angular/core';
 import { productListData } from 'src/app/model/products-list.model';
 
 export interface RetailSession {
@@ -16,7 +15,6 @@ export interface RetailSession {
   providedIn: 'root'
 })
 export class RetailSessionStore {
-  readonly #registerManagerService = inject(RegisterManagerService);
   
   readonly retailState = signalState<RetailSession>({
     isUserLoggedIn: false,
@@ -27,7 +25,9 @@ export class RetailSessionStore {
   });
 
   setLoggedInUser(loggedUser: User): PartialStateUpdater<{loggedUser: User, isUserLoggedIn: boolean}> {
-    return (state) => ({user: loggedUser, isUserLoggedIn: true});
+    return (state) => {
+      return ({user: loggedUser, isUserLoggedIn: true})
+    };
   }
 
   setLoggedOutUser(): PartialStateUpdater<{loggedUser: User, isUserLoggedIn: boolean}> {

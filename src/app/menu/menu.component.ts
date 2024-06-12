@@ -1,5 +1,6 @@
-import { Component, effect } from '@angular/core';
+import { Component, Signal, computed, effect, inject } from '@angular/core';
 import { RegisterManagerService } from '../register/services/register-manager.service';
+import { RetailSessionStore } from '../retail-session-store/retail-session.store';
 
 @Component({
   selector: 'app-menu',
@@ -7,12 +8,5 @@ import { RegisterManagerService } from '../register/services/register-manager.se
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent {
-  showFullMenu: boolean;
-
-  constructor(private registerService: RegisterManagerService) {
-    effect(() => {
-      this.showFullMenu = this.registerService.isUserRegistered();
-    });
-  //TODO[AC]: Complete logic to display menu depending on the logged in status from services
-  }
+  readonly retailStore = inject(RetailSessionStore);
 }

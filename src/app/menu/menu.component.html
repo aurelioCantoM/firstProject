@@ -1,9 +1,8 @@
 <ul class="nav__links">
     <li class="nav__link"><a routerLink="/home" >Home</a></li>
-    <ng-container *ngIf="showFullMenu">
+    <li class="nav__link"><a routerLink="/search">Search</a></li>
+    @if (retailStore.retailState.isUserLoggedIn()) {
         <li class="nav__link"><a routerLink="/product-manager">Products</a></li>
         <li class="nav__link"><a routerLink="/payments">Payments</a></li>
-        <li class="nav__link"><a>Logout</a></li>
-    </ng-container>
-    <li class="nav__link"><a routerLink="/search">Search</a></li>
+    }
 </ul>

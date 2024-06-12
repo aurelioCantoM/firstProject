@@ -22,7 +22,6 @@ export type Cart = {
   selectedProducts: Array<ProductToCart>,
   numberOfItems: number;
   totalSum: number;
-
 };
 
 export type User = {

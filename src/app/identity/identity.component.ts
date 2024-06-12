@@ -1,18 +1,16 @@
-import { Component, DestroyRef, effect, inject } from '@angular/core';
-import { RegisterManagerService } from '../register/services/register-manager.service';
+import { Component, DestroyRef, computed, effect, inject } from '@angular/core';
+import { ActionableRegistrtaion, RegisterManagerService } from '../register/services/register-manager.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { EMPTY_USER, User } from '../type-definitions/product-definitions';
+import { RetailSessionStore } from '../retail-session-store/retail-session.store';
+import { patchState } from '@ngrx/signals';
 
 enum BtnMsg {
   LOGIN = 'Login',
   REGISTER = 'Register'
 }
 
-enum ActionableRegistrtaion {
-  LOGIN,
-  REGISTER,
-}
 
 @Component({
   selector: 'app-identity',
@@ -20,57 +18,36 @@ enum ActionableRegistrtaion {
   styleUrls: ['./identity.component.css']
 })
 export class IdentityComponent {
-
-  isUserloggedIn = false;
-  btnMsg: string;
-  registrationMethod: ActionableRegistrtaion;
-  registeredUser: User = EMPTY_USER;
-  
-  constructor(private authService: RegisterManagerService, private router: Router) {
-    const userRegisteredEffect = effect(() => {
-      this.isUserloggedIn = this.authService.isUserRegistered();
-      this.toggleBtnMsg();
-      console.log('is used logged in? ', this.isUserloggedIn);
-    });
-    const loggedUserData = effect(() => {
-      this.registeredUser = this.authService.loggedUser();
-      if(this.registeredUser !== EMPTY_USER) {
-        this.btnMsg = `Welcome ${this.registeredUser.firstName}!`
-      }
-      console.log(this.registeredUser);
-    });
-    //this.registrationMethod = ActionableRegistrtaion.LOGIN;
-    this.toggleBtnMsg();
-   }
-
-  //use auth service to know whether to display the login/register button or the identity of the user.
-
-  toggleBtnMsg() {
-    if (this.isUserloggedIn) {
-      this.btnMsg = `Welcome ${this.registeredUser.firstName}!`
-    } else {
-      if(this.registrationMethod === ActionableRegistrtaion.LOGIN) {
-        this.btnMsg = BtnMsg.REGISTER;
-      } else {
-        this.btnMsg = BtnMsg.LOGIN;
-      }
+  private readonly cartStore = inject(RetailSessionStore);
+  private readonly registerStore = inject(RegisterManagerService);
+  readonly btnMsg = computed(() => {
+    switch(this.registerStore.identityState.registrationMethod()) {
+      case ActionableRegistrtaion.LOGIN: return 'Register';
+      case ActionableRegistrtaion.REGISTER: return 'Login';
+      case ActionableRegistrtaion.LOGGEDIN: return `Welcome, ${this.registerStore.identityState.registeredUser().firstName}!`;
     }
-  }
+  });
+  
+  constructor(private router: Router) {}
 
   toggleAction() {
-    if(this.isUserloggedIn) {
-      this.authService.setUserLoggedOut();
-    } else {
-      if(!this.isUserloggedIn && this.registrationMethod === ActionableRegistrtaion.LOGIN){
-        this.registrationMethod = ActionableRegistrtaion.REGISTER;
-        this.router.navigate(['register']);
-      } else {
-        this.registrationMethod = ActionableRegistrtaion.LOGIN;
-        this.toggleBtnMsg();
-        this.router.navigate(['login']);
-      }
+    console.log('Method: ', this.registerStore.identityState.registrationMethod())
+    if(this.registerStore.identityState.registrationMethod() === ActionableRegistrtaion.LOGGEDIN) {
+      patchState(this.registerStore.identityState, {registrationMethod: ActionableRegistrtaion.LOGIN, registeredUser: EMPTY_USER});
+      patchState(this.cartStore.retailState, this.cartStore.setLoggedOutUser())
+      this.router.navigate(['login']);
+      return;
     }
-    this.toggleBtnMsg();
+    if(this.registerStore.identityState.registrationMethod() === ActionableRegistrtaion.LOGIN) {
+      patchState(this.registerStore.identityState, {registrationMethod: ActionableRegistrtaion.REGISTER, registeredUser: EMPTY_USER});
+      this.router.navigate(['register']);
+      return;
+    }
+    if(this.registerStore.identityState.registrationMethod() === ActionableRegistrtaion.REGISTER) {
+      patchState(this.registerStore.identityState, {registrationMethod: ActionableRegistrtaion.LOGIN, registeredUser: EMPTY_USER});
+      this.router.navigate(['login']);
+      return;
+    }
   }
 }
 
